@@ -1,4 +1,4 @@
-use std::fs::File;
+use std::fs::{File, OpenOptions};
 use std::io::{self, BufRead, BufReader, Write};
 
 /// Fluent File I/O helper
@@ -26,7 +26,7 @@ impl FileIO {
 
     /// Append a line to the end of the file
     pub fn append(&self, content: &str) -> io::Result<()> {
-        let mut file = std::fs::OpenOptions::new()
+        let mut file = OpenOptions::new()
             .append(true)
             .create(true)
             .open(&self.path)?;
@@ -36,16 +36,27 @@ impl FileIO {
 
     /// Overwrite the entire file with new content
     pub fn write(&self, content: &str) -> io::Result<()> {
-        std::fs::write(&self.path, content)
+        let mut file = OpenOptions::new()
+            .write(true)
+            .truncate(true)
+            .create(true)
+            .open(&self.path)?;
+        file.write_all(content.as_bytes())
     }
 
     /// Write or replace a specific line (line_number starts from 1)
     pub fn write_line(&self, line_number: usize, content: &str) -> io::Result<()> {
+        if line_number == 0 {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "line_number must be >= 1",
+            ));
+        }
         let mut lines = self.read_lines().unwrap_or_default();
 
         // Ensure enough lines exist
         if line_number > lines.len() {
-            lines.resize(line_number, "".to_string());
+            lines.resize(line_number, String::new());
         }
 
         // Replace the specific line
@@ -57,10 +68,16 @@ impl FileIO {
 
     /// Insert a line at a specific line number (pushes following lines down)
     pub fn insert_line(&self, line_number: usize, content: &str) -> io::Result<()> {
+        if line_number == 0 {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "line_number must be >= 1",
+            ));
+        }
         let mut lines = self.read_lines().unwrap_or_default();
 
-        if line_number > lines.len() {
-            lines.resize(line_number - 1, "".to_string());
+        if line_number > lines.len() + 1 {
+            lines.resize(line_number - 1, String::new());
         }
 
         lines.insert(line_number - 1, content.to_string());
