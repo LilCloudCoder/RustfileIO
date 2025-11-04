@@ -1,5 +1,6 @@
 use std::fs::{File, OpenOptions};
-use std::io::{self, BufRead, BufReader, Write};
+use std::io::{self, BufRead, BufReader, BufWriter, Write};
+use std::path::{Path, PathBuf};
 
 /// Fluent File I/O helper
 pub struct FileIO {
