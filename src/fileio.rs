@@ -108,7 +108,7 @@ impl FileIO {
 
     /// Append a line to the end of the file
     pub fn append(&self, content: &str) -> io::Result<()> {
-        let mut file = OpenOptions::new()
+        let file = OpenOptions::new()
             .append(true)
             .create(true)
             .open(&self.path)?;
