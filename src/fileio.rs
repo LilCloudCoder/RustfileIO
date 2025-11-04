@@ -127,7 +127,11 @@ impl FileIO {
             .append(true)
             .create(true)
             .open(&self.path)?;
-        file.write_all(content.as_bytes())
+        let mut writer = BufWriter::new(file);
+        for line in lines {
+            writeln!(writer, "{}", line.as_ref())?;
+        }
+        Ok(())
     }
 
     /// Write or replace a specific line (line_number starts from 1)
