@@ -15,6 +15,8 @@ fn main() {
     f.append("Line 2").unwrap();
 
     f.write_line(2, "Updated line 2").unwrap();
+
+    // Insert a new line at the top
     f.insert_line(1, "Inserted line 1").unwrap();
 
     println!("File content:");
