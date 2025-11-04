@@ -41,8 +41,9 @@ fileio = ">=0.1.2"
 ```rust
 use fileio::file;
 
-fn main() {
-    let f = file("/full/path/to/file/example.txt");
+fn main() -> std::io::Result<()> {
+    let f = file("src/example.txt");
+    f.create_if_missing()?;
 
     // Append a line
     f.append("This is a new line!").unwrap();
