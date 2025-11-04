@@ -55,10 +55,9 @@ fn main() -> std::io::Result<()> {
     // Append more
     f.append_lines(["delta", "epsilon"])?;
 
-    // Read and print all lines
-    for line in f.read_lines().unwrap() {
-        println!("{}", line);
-    }
+    // Read a range and print
+    let first_three = f.read_range(1, 3)?;
+    println!("first_three: {:?}", first_three);
 
     // Read the entire file as string
     let content = f.read_all().unwrap();
