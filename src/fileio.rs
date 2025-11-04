@@ -112,7 +112,8 @@ impl FileIO {
             .append(true)
             .create(true)
             .open(&self.path)?;
-        writeln!(file, "{}", content)?;
+        let mut writer = BufWriter::new(file);
+        writeln!(writer, "{}", content)?;
         Ok(())
     }
 
