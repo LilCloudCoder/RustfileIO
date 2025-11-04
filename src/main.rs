@@ -20,7 +20,23 @@ fn main() {
     // Insert a new line at the top
     f.insert_line(1, "Inserted line 1").unwrap();
 
-    println!("File content:");
+    // Insert multiple lines at position 3
+    f.insert_lines(3, ["A", "B", "C"]).unwrap();
+
+    // Remove line 5
+    f.remove_line(5).unwrap();
+
+    // Find & replace across the whole file
+    f.find_replace("Line", "Ln").unwrap();
+
+    // Show a range of lines
+    let range = f.read_range(1, 4).unwrap();
+    println!("First 4 lines: {:?}", range);
+
+    // Count and display all lines
+    println!("File has {} lines", f.count_lines().unwrap());
+
+    println!("\nFile content:");
     for line in f.read_lines().unwrap() {
         println!("{}", line);
     }
