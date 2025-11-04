@@ -1,7 +1,11 @@
 use fileio::file;
 
 fn main() {
-    let f = file("/Users/lilcoder/life/mastery/rust/fileIO/src/example.txt"); // make sure path is writable
+    // Use a relative path inside the project to keep the example portable
+    let f = file("src/example.txt");
+
+    // Ensure the file exists
+    f.create_if_missing().expect("failed to create example file");
 
     f.append("Line 1").unwrap();
     f.append("Line 2").unwrap();
