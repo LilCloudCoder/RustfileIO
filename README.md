@@ -52,8 +52,8 @@ fn main() -> std::io::Result<()> {
     f.insert_line(1, "start")?;
     f.write_line(3, "BETA")?;
 
-    // Insert a line at line 1
-    f.insert_line(1, "Inserted line 1").unwrap();
+    // Append more
+    f.append_lines(["delta", "epsilon"])?;
 
     // Read and print all lines
     for line in f.read_lines().unwrap() {
