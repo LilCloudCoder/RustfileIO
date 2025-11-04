@@ -34,7 +34,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-fileio = "...."
+fileio = ">=0.2.0"
 ```
 
 ### Usage:
