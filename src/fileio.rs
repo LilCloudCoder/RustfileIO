@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 /// Fluent File I/O helper
 #[derive(Debug, Clone)]
 pub struct FileIO {
-    path: String,
+    path: PathBuf,
 }
 
 impl FileIO {
