@@ -37,7 +37,7 @@ Add to your `Cargo.toml`:
 fileio = ">=0.1.2"
 ```
 
-### Usage:
+## Quick start
 ```rust
 use fileio::file;
 
