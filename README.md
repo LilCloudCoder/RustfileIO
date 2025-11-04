@@ -1,6 +1,6 @@
 # FileIO
 
-Fluent file operations in Rust: read, write, append, replace, or insert lines easily.
+Fluent file operations in Rust: read, write, append, replace, insert, and manipulate lines with a simple API.
 
 ## Features
 
