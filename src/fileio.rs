@@ -3,6 +3,7 @@ use std::io::{self, BufRead, BufReader, BufWriter, Write};
 use std::path::{Path, PathBuf};
 
 /// Fluent File I/O helper
+#[derive(Debug, Clone)]
 pub struct FileIO {
     path: String,
 }
