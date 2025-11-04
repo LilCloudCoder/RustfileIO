@@ -13,3 +13,8 @@ pub mod fileio;
 
 pub use fileio::FileIO;
 pub use fileio::file;
+
+/// Commonly used items
+pub mod prelude {
+    pub use crate::{file, FileIO};
+}
