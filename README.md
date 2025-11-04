@@ -59,8 +59,6 @@ fn main() -> std::io::Result<()> {
     let first_three = f.read_range(1, 3)?;
     println!("first_three: {:?}", first_three);
 
-    // Read the entire file as string
-    let content = f.read_all().unwrap();
-    println!("Whole file:\n{}", content);
+    Ok(())
 }
 ```
