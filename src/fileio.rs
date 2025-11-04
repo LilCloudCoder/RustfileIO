@@ -49,6 +49,63 @@ impl FileIO {
         reader.lines().collect()
     }
 
+    /// Read only non-empty lines (trimmed)
+    pub fn read_non_empty_lines(&self) -> io::Result<Vec<String>> {
+        Ok(self
+            .read_lines()?
+            .into_iter()
+            .map(|s| s.trim().to_string())
+            .filter(|s| !s.is_empty())
+            .collect())
+    }
+
+    /// Count number of lines in file (fast streaming)
+    pub fn count_lines(&self) -> io::Result<usize> {
+        let file = File::open(&self.path)?;
+        let reader = BufReader::new(file);
+        Ok(reader.lines().count())
+    }
+
+    /// Whether the file is empty or missing
+    pub fn is_empty(&self) -> io::Result<bool> {
+        match File::open(&self.path) {
+            Ok(mut f) => {
+                use std::io::Read;
+                let mut buf = [0u8; 1];
+                Ok(f.read(&mut buf).unwrap_or(0) == 0)
+            }
+            Err(e) if e.kind() == io::ErrorKind::NotFound => Ok(true),
+            Err(e) => Err(e),
+        }
+    }
+
+    /// Overwrite the entire file with new content
+    pub fn write(&self, content: &str) -> io::Result<()> {
+        let file = OpenOptions::new()
+            .write(true)
+            .truncate(true)
+            .create(true)
+            .open(&self.path)?;
+        let mut writer = BufWriter::new(file);
+        writer.write_all(content.as_bytes())
+    }
+
+    /// Write the entire file with the provided lines (joined with `\n`)
+    pub fn write_lines<I, S>(&self, lines: I) -> io::Result<()>
+    where
+        I: IntoIterator<Item = S>,
+        S: AsRef<str>,
+    {
+        let mut first = true;
+        let mut joined = String::new();
+        for line in lines {
+            if !first { joined.push('\n'); }
+            first = false;
+            joined.push_str(line.as_ref());
+        }
+        self.write(&joined)
+    }
+
     /// Append a line to the end of the file
     pub fn append(&self, content: &str) -> io::Result<()> {
         let mut file = OpenOptions::new()
