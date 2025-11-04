@@ -7,6 +7,10 @@ fn main() {
     // Ensure the file exists
     f.create_if_missing().expect("failed to create example file");
 
+    // Start with clean content
+    f.write("Start").expect("write failed");
+
+    // Demonstrate appends
     f.append("Line 1").unwrap();
     f.append("Line 2").unwrap();
 
