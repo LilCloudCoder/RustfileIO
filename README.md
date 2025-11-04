@@ -48,8 +48,9 @@ fn main() -> std::io::Result<()> {
     // Overwrite with fresh content
     f.write_lines(["alpha", "beta", "gamma"])?;
 
-    // Replace line 2
-    f.write_line(2, "Updated line 2").unwrap();
+    // Insert and update lines (1-based)
+    f.insert_line(1, "start")?;
+    f.write_line(3, "BETA")?;
 
     // Insert a line at line 1
     f.insert_line(1, "Inserted line 1").unwrap();
