@@ -117,11 +117,14 @@ impl FileIO {
         Ok(())
     }
 
-    /// Overwrite the entire file with new content
-    pub fn write(&self, content: &str) -> io::Result<()> {
-        let mut file = OpenOptions::new()
-            .write(true)
-            .truncate(true)
+    /// Append multiple lines at once
+    pub fn append_lines<I, S>(&self, lines: I) -> io::Result<()>
+    where
+        I: IntoIterator<Item = S>,
+        S: AsRef<str>,
+    {
+        let file = OpenOptions::new()
+            .append(true)
             .create(true)
             .open(&self.path)?;
         file.write_all(content.as_bytes())
