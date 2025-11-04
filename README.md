@@ -45,8 +45,8 @@ fn main() -> std::io::Result<()> {
     let f = file("src/example.txt");
     f.create_if_missing()?;
 
-    // Append a line
-    f.append("This is a new line!").unwrap();
+    // Overwrite with fresh content
+    f.write_lines(["alpha", "beta", "gamma"])?;
 
     // Replace line 2
     f.write_line(2, "Updated line 2").unwrap();
