@@ -3,7 +3,7 @@ name = "fileio"
 version = "0.2.0"
 authors = ["Yogya <yogya.coder@gmail.com>"]
 edition = "2021"
-description = "Fluent file I/O crate for Rust: read/write/append lines easily, including write_line functionality"
+description = "Fluent file I/O for Rust: read/write/append, insert/remove, ranges, find/replace, and utilities"
 license = "MIT"
 repository = "https://github.com/lilcoder/RustfileIO"
 
