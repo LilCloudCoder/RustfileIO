@@ -11,7 +11,30 @@ pub struct FileIO {
 impl FileIO {
     /// Create a new FileIO instance
     pub fn new(path: &str) -> Self {
-        Self { path: path.to_string() }
+        Self { path: PathBuf::from(path) }
+    }
+
+    /// Alternative constructor accepting anything that can be referenced as a Path
+    pub fn from_path<P: AsRef<Path>>(path: P) -> Self {
+        Self { path: path.as_ref().to_path_buf() }
+    }
+
+    /// Return the underlying path as &Path
+    pub fn path(&self) -> &Path {
+        &self.path
+    }
+
+    /// Check whether the file exists
+    pub fn exists(&self) -> bool {
+        self.path.exists()
+    }
+
+    /// Ensure the file exists (creates an empty file if missing)
+    pub fn create_if_missing(&self) -> io::Result<()> {
+        if !self.exists() {
+            OpenOptions::new().create(true).write(true).open(&self.path)?;
+        }
+        Ok(())
     }
 
     /// Read entire file as a single String
