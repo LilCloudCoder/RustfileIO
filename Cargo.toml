@@ -5,7 +5,7 @@ authors = ["Yogya <yogya.coder@gmail.com>"]
 edition = "2021"
 description = "Fluent file I/O crate for Rust: read/write/append lines easily, including write_line functionality"
 license = "MIT"
-repository = "https://github.com/lilcloudcoder/rustfileio"
+repository = "https://github.com/lilcoder/RustfileIO"
 
 [dependencies]
 # No external dependencies
