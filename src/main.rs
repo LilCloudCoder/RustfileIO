@@ -14,6 +14,7 @@ fn main() {
     f.append("Line 1").unwrap();
     f.append("Line 2").unwrap();
 
+    // Replace a specific line
     f.write_line(2, "Updated line 2").unwrap();
 
     // Insert a new line at the top
