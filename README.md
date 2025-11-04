@@ -62,3 +62,11 @@ fn main() -> std::io::Result<()> {
     Ok(())
 }
 ```
+
+## Examples
+See `src/main.rs` for a more comprehensive example demonstrating inserts, deletes, find/replace, and counts.
+
+## Safety and portability
+- Uses a relative path in examples so it works on any machine.
+- Validates line numbers are 1-based and returns clear `InvalidInput` errors.
+- Missing files are handled gracefully with helpers like `.create_if_missing()` and `.is_empty()`.
