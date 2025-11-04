@@ -1,6 +1,6 @@
 //! FileIO crate: fluent file operations in Rust
 //!
-//! Usage:
+//! Quick start:
 //! ```rust
 //! use fileio::file;
 //!
