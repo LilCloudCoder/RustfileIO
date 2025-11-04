@@ -174,6 +174,69 @@ impl FileIO {
 
         self.write(&lines.join("\n"))
     }
+
+    /// Insert multiple lines at position (first line_number = 1)
+    pub fn insert_lines<I, S>(&self, line_number: usize, new_lines: I) -> io::Result<()>
+    where
+        I: IntoIterator<Item = S>,
+        S: AsRef<str>,
+    {
+        if line_number == 0 {
+            return Err(io::Error::new(io::ErrorKind::InvalidInput, "line_number must be >= 1"));
+        }
+        let mut lines = self.read_lines().unwrap_or_default();
+        if line_number > lines.len() + 1 {
+            lines.resize(line_number - 1, String::new());
+        }
+        let mut idx = line_number - 1;
+        for l in new_lines {
+            lines.insert(idx, l.as_ref().to_string());
+            idx += 1;
+        }
+        self.write(&lines.join("\n"))
+    }
+
+    /// Remove a specific line (1-based). No-op if out of range.
+    pub fn remove_line(&self, line_number: usize) -> io::Result<()> {
+        if line_number == 0 { return Err(io::Error::new(io::ErrorKind::InvalidInput, "line_number must be >= 1")); }
+        let mut lines = self.read_lines().unwrap_or_default();
+        if line_number <= lines.len() {
+            lines.remove(line_number - 1);
+        }
+        self.write(&lines.join("\n"))
+    }
+
+    /// Remove lines from start..=end (1-based, inclusive). Swaps if start > end.
+    pub fn remove_lines(&self, start: usize, end: usize) -> io::Result<()> {
+        if start == 0 || end == 0 { return Err(io::Error::new(io::ErrorKind::InvalidInput, "start/end must be >= 1")); }
+        let mut lines = self.read_lines().unwrap_or_default();
+        let (mut s, mut e) = (start, end);
+        if s > e { std::mem::swap(&mut s, &mut e); }
+        if s <= e && s <= lines.len() {
+            let s0 = s - 1;
+            let e0 = e.min(lines.len()) - 1;
+            lines.drain(s0..=e0);
+        }
+        self.write(&lines.join("\n"))
+    }
+
+    /// Read a range of lines start..=end (1-based, inclusive)
+    pub fn read_range(&self, start: usize, end: usize) -> io::Result<Vec<String>> {
+        if start == 0 || end == 0 { return Err(io::Error::new(io::ErrorKind::InvalidInput, "start/end must be >= 1")); }
+        let lines = self.read_lines().unwrap_or_default();
+        let (mut s, mut e) = (start, end);
+        if s > e { std::mem::swap(&mut s, &mut e); }
+        let s0 = s.saturating_sub(1);
+        let e0 = e.min(lines.len());
+        Ok(lines[s0..e0].to_vec())
+    }
+
+    /// Find and replace the entire file content: replaces all occurrences
+    pub fn find_replace(&self, find: &str, replace: &str) -> io::Result<()> {
+        let content = self.read_all().unwrap_or_default();
+        let updated = content.replace(find, replace);
+        self.write(&updated)
+    }
 }
 
 /// Helper function for convenience
